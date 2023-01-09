@@ -1,7 +1,9 @@
-import 'package:package_name/package_name.dart';
-
-// A pratical example of how to use the package...    
+import 'package:carvable/carvable.dart';
 
 void main() {
-  // Example code...
+  final carvable = CarvableString('abcd');
+  carvable.remove(1, 2);
+  print(carvable.apply());
+
+  print('abcde'.remove(1, 2).remove(3, 4).apply());
 }
