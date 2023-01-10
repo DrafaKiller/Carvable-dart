@@ -1,13 +1,14 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:carvable/src/utils/ast.dart';
-import 'package:carvable/src/zones/analyzer.dart';
+import 'package:carvable/src/zones/ast_node.dart';
 import 'package:carvable/src/zones/range.dart';
 
 import 'string.dart';
 
 class CarvableAnalyzer extends CarvableString {
   CarvableAnalyzer(super.input, { super.offset, super.replacement });
+  CarvableAnalyzer.empty() : super.empty();
   factory CarvableAnalyzer.fromNode(AstNode node) => node.carvable;
   factory CarvableAnalyzer.fromElement(Element element) => element.carvable;
   factory CarvableAnalyzer.fromLibrary(LibraryElement library) => library.carvable;
@@ -28,7 +29,7 @@ extension CarvableNode on AstNode {
 }
 
 extension CarvableElement on Element {
-  CarvableAnalyzer get carvable => node?.carvable ?? CarvableAnalyzer('');
+  CarvableAnalyzer get carvable => node?.carvable ?? CarvableAnalyzer.empty();
   CarvingRange get carving => node?.carving ?? CarvingRange.empty();
 
   CarvableAnalyzer remove(AstNode node) => removeNode(node);
