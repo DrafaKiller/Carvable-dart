@@ -9,6 +9,9 @@ class CarvableString extends Carvable<String, CarvingRange> {
   CarvableString(this.input, { this.offset = 0, this.replacement });
   CarvableString.empty() : this('');
 
+  /// Append a carving range to be removed when applied.
+  /// - `start` - Inclusive
+  /// - `end` - Exclusive
   CarvableString remove(int start, int end) => this..carve(CarvingRange(start, end));
 
   @override
