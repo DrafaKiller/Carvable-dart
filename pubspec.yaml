@@ -1,6 +1,6 @@
 name: carvable
 description: Allows you to remove and change parts of something, without modifying the original. Carve objects such as Strings and AstNodes, or implement the generic interface.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/DrafaKiller/Carvable-dart
 issue_tracker: https://github.com/DrafaKiller/Carvable-dart/issues
 
