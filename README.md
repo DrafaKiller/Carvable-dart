@@ -60,7 +60,7 @@ print(carvable.apply()); // 'ad'
 
 ### Carvable
 
-Carvable objects are objects which receive carving zones to be used to delimit how the result will be.
+Carvable objects are objects which receive carvings to be used to delimit how the result will be modified, builder-like.
 
 This object may accept any carving type, but might not apply all of them, depending on the Carvable implementation.
 
