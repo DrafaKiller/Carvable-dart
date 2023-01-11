@@ -1,102 +1,117 @@
 import 'package:analyzer/dart/ast/ast.dart';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:carvable/src/utils/ast.dart';
-import 'package:carvable/src/zones/ast_node.dart';
-import 'package:carvable/src/zones/range.dart';
+import 'package:carvable/src/utils/iterable.dart';
 
-import 'string.dart';
+import './string.dart';
+import '../carvings/analyzer/node.dart';
+import '../carvings/analyzer/element.dart';
+import '../carvings/string/replace.dart';
 
-class CarvableAnalyzer extends CarvableString {
-  CarvableAnalyzer(super.input, { super.offset, super.replacement });
-  CarvableAnalyzer.empty() : super.empty();
-  factory CarvableAnalyzer.fromNode(AstNode node) => node.carvable;
-  factory CarvableAnalyzer.fromElement(Element element) => element.carvable;
-  factory CarvableAnalyzer.fromLibrary(LibraryElement library) => library.carvable;
-  
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer removeNode(AstNode node) => this..carve(node.carving);
+abstract class CarvableAnalyzer extends CarvableString {
+	CarvableAnalyzer(super.input);
+	CarvableAnalyzer.empty() : super.empty();
 
-  /// Remove an Element from the resulting source.
-  CarvableAnalyzer removeElement(Element element) => this..carve(element.carving);
+	/* -= Modifying Methods =- */
 
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeNodes(Iterable<AstNode> nodes) => this..carveAll(nodes.map((node) => node.carving));
+	CarvableAnalyzer removeNode(AstNode node) => this..carve(node.carving);
+	CarvableAnalyzer removeElement(Element element) {
+		final node = element.node;
+		if (node != null) carve(node.carving);
+		return this;
+	}
 
-  /// Remove multiple Elements from the resulting source.
-  CarvableAnalyzer removeElements(Iterable<Element> elements) => this..carveAll(elements.map((element) => element.carving));
+	CarvableAnalyzer removeNodes(Iterable<AstNode> nodes) => this..carveAll(nodes.map((node) => node.carving));
+	CarvableAnalyzer removeElements(Iterable<Element> elements) =>
+		this..carveAll(
+			elements.map((element) => element.node?.carving).whereNotNull()
+		);
+}
+
+class CarvableNode extends CarvableAnalyzer {
+	final AstNode target;
+	CarvableNode(this.target) : super.empty();
+
+	@override String get input => target.toSource();
+}
+
+class CarvableElement extends CarvableAnalyzer {
+	final Element target;
+	CarvableElement(this.target) : super.empty();
+
+	@override String get input => target.source?.contents.data ?? '';
 }
 
 /* -= Extensions =- */
 
-extension CarvableNode on AstNode {
-  CarvableAnalyzer get carvable => CarvableAnalyzer(toSource(), offset: offset);
-  CarvingRange get carving => CarvingNode(this);
+extension CarvableNodeExtension on AstNode {
+	CarvableAnalyzer get carvable => CarvableNode(this);
+	CarvingNode get carving => CarvingNode(this);
 
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer remove(AstNode node) => removeNode(node);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer remove(AstNode node) => removeNode(node);
 
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
 
-  /// Remove an Element from the resulting source.
-  CarvableAnalyzer removeElement(Element element) => carvable.removeElement(element);
+	/// Remove an Element from the resulting source.
+	CarvableAnalyzer removeElement(Element element) =>
+		carvable.removeElement(element);
 
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAll(Iterable<AstNode> node) => removeAllNodes(node);
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAll(Iterable<AstNode> node) => removeAllNodes(node);
 
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) => carvable.removeNodes(nodes);
-  
-  /// Remove multiple Elements from the resulting source.
-  CarvableAnalyzer removeAllElements(Iterable<Element> elements) => carvable.removeElements(elements);
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) =>
+		carvable.removeNodes(nodes);
+
+	/// Remove multiple Elements from the resulting source.
+	CarvableAnalyzer removeAllElements(Iterable<Element> elements) =>
+		carvable.removeElements(elements);
 }
 
-extension CarvableElement on Element {
-  CarvableAnalyzer get carvable => node?.carvable ?? CarvableAnalyzer.empty();
-  CarvingRange get carving => node?.carving ?? CarvingRange.empty();
+extension CarvableElementExtension on Element {
+	CarvableElement get carvable => CarvableElement(this);
+	CarvingElement get carving => CarvingElement(this);
 
-  
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer remove(AstNode node) => removeNode(node);
-  
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
-  
-  /// Remove an Element from the resulting source.
-  CarvableAnalyzer removeElement(Element element) => carvable.removeElement(element);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer remove(AstNode node) => removeNode(node);
 
-  
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAll(Iterable<AstNode> node) => removeAllNodes(node);
-  
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) => carvable.removeNodes(nodes);
-  
-  /// Remove multiple Elements from the resulting source.
-  CarvableAnalyzer removeAllElements(Iterable<Element> elements) => carvable.removeElements(elements);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
+
+	/// Remove an Element from the resulting source.
+	CarvableAnalyzer removeElement(Element element) => carvable.removeElement(element);
+
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAll(Iterable<AstNode> node) => removeAllNodes(node);
+
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) => carvable.removeNodes(nodes);
+
+	/// Remove multiple Elements from the resulting source.
+	CarvableAnalyzer removeAllElements(Iterable<Element> elements) => carvable.removeElements(elements);
 }
 
-extension CarvableLibrary on LibraryElement {
-  CarvableAnalyzer get carvable => CarvableAnalyzer(source.contents.data);
-  CarvingRange get carving => CarvingRange(0, source.contents.data.length);
+extension CarvableLibraryExtension on LibraryElement {
+	CarvableAnalyzer get carvable => CarvableElement(this);
+	CarvingReplacement get carving => CarvingReplacement(0, source.contents.data.length);
 
-  
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer remove(Element element) => removeElement(element);
-  
-  /// Remove an AstNode from the resulting source.
-  CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
-  
-  /// Remove an Element from the resulting source.
-  CarvableAnalyzer removeElement(Element element) => carvable.removeElement(element);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer remove(Element element) => removeElement(element);
 
-  
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAll(Iterable<Element> elements) => removeAllElements(elements);
-  
-  /// Remove multiple AstNodes from the resulting source.
-  CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) => carvable.removeNodes(nodes);
-  
-  /// Remove multiple Elements from the resulting source.
-  CarvableAnalyzer removeAllElements(Iterable<Element> elements) => carvable.removeElements(elements);
+	/// Remove an AstNode from the resulting source.
+	CarvableAnalyzer removeNode(AstNode node) => carvable.removeNode(node);
+
+	/// Remove an Element from the resulting source.
+	CarvableAnalyzer removeElement(Element element) => carvable.removeElement(element);
+
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAll(Iterable<Element> elements) => removeAllElements(elements);
+
+	/// Remove multiple AstNodes from the resulting source.
+	CarvableAnalyzer removeAllNodes(Iterable<AstNode> nodes) => carvable.removeNodes(nodes);
+
+	/// Remove multiple Elements from the resulting source.
+	CarvableAnalyzer removeAllElements(Iterable<Element> elements) => carvable.removeElements(elements);
 }

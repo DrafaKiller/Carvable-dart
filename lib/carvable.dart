@@ -1,3 +1,3 @@
 library carvable;
 
-export 'src/carvables/string.dart';
+export './src/carvables/string.dart';

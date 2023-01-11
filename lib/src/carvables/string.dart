@@ -1,38 +1,43 @@
+import '../carvings/positional.dart';
+import '../carvings/string/append.dart';
+import '../carvings/string/replace.dart';
 import '../interface.dart';
-import '../zones/range.dart';
 
-class CarvableString extends Carvable<String, CarvingRange> {
-  final String input;
-  final int offset;
-  final String? replacement;
+class CarvableString extends Carvable<String, Carving<String, String>> {
+	final String input;
+	final int offset;
 
-  CarvableString(this.input, { this.offset = 0, this.replacement });
-  CarvableString.empty() : this('');
+	CarvableString(this.input, { this.offset = 0 });
+	CarvableString.empty() : this('');
 
-  /// Append a carving range to be removed when applied.
-  /// - `start` - Inclusive
-  /// - `end` - Exclusive
-  CarvableString remove(int start, int end) => this..carve(CarvingRange(start, end));
+	CarvableString remove(int start, int end) =>
+		this..carve(CarvingReplacement(start, end));
 
-  @override
-  String apply() {
-    final carvings = this.carvings.toList();
-    carvings.sort((a, b) => a.start.compareTo(b.start));
+	CarvableString replace(int start, int end, String replacement) =>
+		this..carve(CarvingReplacement(start, end, replacement: replacement));
 
-    final buffer = StringBuffer();
-    var last = offset;
-    for (final carving in carvings) {
-        buffer.write(input.substring(last, carving.start));
-        buffer.write(carving.replacement ?? '');
-        last = carving.end;
-    }
-    buffer.write(input.substring(last));
-    return buffer.toString();
+	CarvableString append(String value) =>
+		this..carve(CarvingAppend(value));
+
+	@override
+	String apply() {
+    int offset = this.offset;
+    return carvings.fold(input, (input, carving) {
+      final String result = carving is PositionalCarving<String, String>
+        ? carving.apply(input, offset: offset)
+        : carving.apply(input);
+
+      offset += input.length - result.length;
+      return result;
+    });
   }
+
+	@override
+	String toString() => apply();
 }
 
-extension CarvableStringExtension on String {
-  CarvableString get carvable => CarvableString(this);
+/* -= Extensions =- */
 
-  CarvableString remove(int start, int end) => carvable.remove(start, end);
+extension CarvableStringExtension on String {
+	CarvableString get carvable => CarvableString(this);
 }

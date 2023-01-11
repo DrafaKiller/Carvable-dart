@@ -3,7 +3,7 @@
 
 # Carvable
 
-Allows you to remove and change parts of something, without modifying the original.
+Allows you to remove and change parts of something, without modifying the original, builder-like.
 The carvable object returns a result with the changes applied.
 
 With this, it's possible to hide sections of a string that would be created by objects.
@@ -106,7 +106,7 @@ class CarvingRange {
     carvable.remove(1, 2);
     print(carvable.apply()); // 'acd'
 
-    print('abcde'.remove(1, 2).remove(3, 4).apply()); // 'ace'
+    print('abcde'.carvable.remove(1, 2).remove(3, 4).apply()); // 'ace'
   }
   ```
 </details>

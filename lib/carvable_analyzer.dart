@@ -1,3 +1,3 @@
 library carvable_analyzer;
 
-export 'src/carvables/analyzer.dart';
+export './src/carvables/analyzer.dart';
