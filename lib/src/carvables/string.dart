@@ -22,9 +22,11 @@ class CarvableString extends Carvable<String, Carving<String, String>> {
 	CarvableString replace(int start, int end, String replacement) =>
 		this..carve(CarvingReplacement(start, end, replacement: replacement));
 
-  /// Create a carving that will append a string at the end when applied.
-	CarvableString append(String value) =>
-		this..carve(CarvingAppend(value));
+  /// Create a carving that will append a string when applied.
+  /// 
+  /// If argument `at` is not set, it will be append at the end of the string.
+	CarvableString append(String value, { int? at }) =>
+		this..carve(CarvingAppend(value, at: at));
 
 	@override
 	String apply() {

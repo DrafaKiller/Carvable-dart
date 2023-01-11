@@ -1,5 +1,9 @@
 ## 1.1.0
 
+Added:
+- **CarvableString**'s `append()` method, `at` argument, set the index where to append the string.
+	If not set, the string will be appended at the end.
+
 Changed:
 - All methods of **CarvableNode** and **CarvableElement** return themselves instead of **CarvableAnalyzer**,
 	allowing for chaining.
