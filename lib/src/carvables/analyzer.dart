@@ -39,6 +39,12 @@ class CarvableNode extends CarvableAnalyzer {
 	CarvableNode(this.target) : super.empty();
 
 	@override String get input => target.toSource();
+
+  @override CarvableNode removeNode(AstNode node) => super.removeNode(node) as CarvableNode;
+  @override CarvableNode removeNodes(Iterable<AstNode> nodes) => super.removeNodes(nodes) as CarvableNode;
+
+  @override CarvableNode removeElement(Element element) => super.removeElement(element) as CarvableNode;
+  @override CarvableNode removeElements(Iterable<Element> elements) => super.removeElements(elements) as CarvableNode;
 }
 
 class CarvableElement extends CarvableAnalyzer {
@@ -46,6 +52,12 @@ class CarvableElement extends CarvableAnalyzer {
 	CarvableElement(this.target) : super.empty();
 
 	@override String get input => target.source?.contents.data ?? '';
+
+  @override CarvableElement removeNode(AstNode node) => super.removeNode(node) as CarvableElement;
+  @override CarvableElement removeNodes(Iterable<AstNode> nodes) => super.removeNodes(nodes) as CarvableElement;
+
+  @override CarvableElement removeElement(Element element) => super.removeElement(element) as CarvableElement;
+  @override CarvableElement removeElements(Iterable<Element> elements) => super.removeElements(elements) as CarvableElement;
 }
 
 /* -= Extensions =- */

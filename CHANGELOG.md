@@ -1,3 +1,9 @@
+## 1.1.0
+
+Changed:
+- All methods of **CarvableNode** and **CarvableElement** return themselves instead of **CarvableAnalyzer**,
+	allowing for chaining.
+
 ## 1.0.0
 
 **BREAKING CHANGES:**
