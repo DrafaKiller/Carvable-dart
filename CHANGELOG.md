@@ -6,6 +6,9 @@ Changed:
 - Narrow **CarvingNode** into **CarvingToken**, it accepts SyntacticEntity instead of AstNode
 - Renamed `removeNode()` to `removeToken()`, in **CarvableAnalyzer** extensions
 
+Fixed:
+- No offset in **CarvingNode**
+
 ## 1.0.0
 
 **BREAKING CHANGES:**

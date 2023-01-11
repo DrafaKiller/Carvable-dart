@@ -40,6 +40,7 @@ class CarvableToken extends CarvableAnalyzer {
 	CarvableToken(this.target) : super.empty();
 
 	@override String get input => target.toSource();
+  @override int get offset => target.offset;
 
   @override CarvableToken removeToken(SyntacticEntity token) => super.removeToken(token) as CarvableToken;
   @override CarvableToken removeTokens(Iterable<SyntacticEntity> tokens) => super.removeTokens(tokens) as CarvableToken;
