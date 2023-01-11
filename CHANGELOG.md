@@ -3,6 +3,8 @@
 Changed:
 - All methods of **CarvableNode** and **CarvableElement** return themselves instead of **CarvableAnalyzer**,
 	allowing for chaining.
+- Narrow **CarvingNode** into **CarvingToken**, it accepts SyntacticEntity instead of AstNode
+- Renamed `removeNode()` to `removeToken()`, in **CarvableAnalyzer** extensions
 
 ## 1.0.0
 
