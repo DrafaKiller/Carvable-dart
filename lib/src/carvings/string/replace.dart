@@ -1,4 +1,3 @@
-import '../../interface.dart';
 import '../positional.dart';
 
 class CarvingReplacement extends PositionalCarving<String, String> {

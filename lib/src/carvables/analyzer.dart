@@ -14,14 +14,20 @@ abstract class CarvableAnalyzer extends CarvableString {
 
 	/* -= Modifying Methods =- */
 
+  /// Remove an AstNode from the resulting source.
 	CarvableAnalyzer removeNode(AstNode node) => this..carve(node.carving);
+
+  /// Remove an Element from the resulting source.
 	CarvableAnalyzer removeElement(Element element) {
 		final node = element.node;
 		if (node != null) carve(node.carving);
 		return this;
 	}
 
+  /// Remove multiple AstNodes from the resulting source.
 	CarvableAnalyzer removeNodes(Iterable<AstNode> nodes) => this..carveAll(nodes.map((node) => node.carving));
+  
+  /// Remove multiple Elements from the resulting source.
 	CarvableAnalyzer removeElements(Iterable<Element> elements) =>
 		this..carveAll(
 			elements.map((element) => element.node?.carving).whereNotNull()

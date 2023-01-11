@@ -62,34 +62,36 @@ print(carvable.apply()); // 'ad'
 
 Carvable objects are objects which receive carving zones to be used to delimit how the result will be.
 
-This object may accept any carving zone type, but might not apply all of them, depending on the Carvable implementation.
+This object may accept any carving type, but might not apply all of them, depending on the Carvable implementation.
 
-After adding the carving zones you may apply those zones to get the result.
+After adding the carvings you may apply those to get the result.
 
 ```dart
-class CarvableExample extends Carvable<String, CarvingRange> {
+class CarvableStringExample extends Carvable<String, Carving<String, String>> {
+  final String input = 'abcd';
+
   @override
-  String apply() {
-    for (final zone in carvings) {
-      // ...
-    }
-  }
+  String apply() => carvings.fold(input, (value, element) => element.apply(value));
 }
 ```
 
-### Zones
+### Carvings
 
-Zones are basic data structures with the information needed to carve a part of the object.
+Carvings are data structures with the information needed to carve a part of the object.
+They can also carve themselves into an object, using the `apply()` method.
 
-This data can be anything, from a number to a complex path, or even any already existing object.
-What matters is that this zone will imprint something into the final result.
+They have an input type, and a result type. Those delimit what the carving will do to the object, and what objects accept.
+For instance, a string carving will have an input and result of String, and that way can be chained.
 
 ```dart
-class CarvingRange {
+class CarvingRemove extends Carving<String, String> {
   final int start;
   final int end;
 
-  CarvingRange(this.start, this.end);
+  CarvingRemove(this.start, this.end);
+
+  @override
+  String apply(String input) => input.replaceRange(start, end, '');
 }
 ```
 

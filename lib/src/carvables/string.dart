@@ -10,12 +10,19 @@ class CarvableString extends Carvable<String, Carving<String, String>> {
 	CarvableString(this.input, { this.offset = 0 });
 	CarvableString.empty() : this('');
 
+  /// Create a carving that will remove a section when applied.
+  /// - `start` - Inclusive
+  /// - `end` - Exclusive
 	CarvableString remove(int start, int end) =>
 		this..carve(CarvingReplacement(start, end));
 
+  /// Create a carving that will repalce a section when applied.
+  /// - `start` - Inclusive
+  /// - `end` - Exclusive
 	CarvableString replace(int start, int end, String replacement) =>
 		this..carve(CarvingReplacement(start, end, replacement: replacement));
 
+  /// Create a carving that will append a string at the end when applied.
 	CarvableString append(String value) =>
 		this..carve(CarvingAppend(value));
 

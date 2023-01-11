@@ -4,10 +4,16 @@ abstract class PositionalCarving<InputT, ResultT> extends Carving<InputT, Result
   final int start;
   final int end;
 
-  PositionalCarving(this.start, this.end) :
+  /// A data structure to represent a range of a string.
+  /// 
+  /// It depends on the impementation, but usually:
+  /// - `start` - Inclusive
+  /// - `end` - Exclusive
+  PositionalCarving(this.start, [ int? end ]) :
+    end = end ?? start,
 		assert(start >= 0),
-		assert(end >= 0),
-		assert(start <= end);
+		assert(end == null || end >= 0),
+		assert(end == null || start <= end);
 
   @override ResultT apply(InputT input, { int offset = 0 });
 
