@@ -29,12 +29,12 @@ class CarvableString extends Carvable<String, Carving<String, String>> {
 	@override
 	String apply() {
     int offset = this.offset;
-    return carvings.fold(input, (input, carving) {
+    return carvings.fold(input, (value, carving) {
       final String result = carving is PositionalCarving<String, String>
-        ? carving.apply(input, offset: offset)
-        : carving.apply(input);
+        ? carving.apply(value, offset: offset)
+        : carving.apply(value);
 
-      offset += input.length - result.length;
+      offset += value.length - result.length;
       return result;
     });
   }

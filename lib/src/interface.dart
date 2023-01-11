@@ -68,7 +68,7 @@ abstract class Carvable<ResultT, CarvingT extends Carving> {
 /// }
 /// ```
 abstract class Carving<InputT, ResultT> extends Comparable<Carving> {
-  @override int compareTo(Carving other) => 0;
+  @override int compareTo(Carving other) => -1;
 
 	ResultT apply(InputT input);
 }

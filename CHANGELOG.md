@@ -8,6 +8,7 @@ Changed:
 
 Fixed:
 - No offset in **CarvingNode**
+- Method `compareTo()` in **Carving** was always merging carvings
 
 ## 1.0.0
 
