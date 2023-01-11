@@ -11,9 +11,7 @@ For instance, hiding child nodes inside AstNode.
 
 ```dart
 final AstNode node;
-final AstNode child = node.childEntities.elementAt(0) as AstNode;
-
-print(node.remove(child).apply());
+print( node.remove(node.childEntities.elementAt(0)).apply() );
 ```
 
 The position of the child could change at any time, and it would still hide the correct section in the string.
