@@ -26,7 +26,7 @@ class CarvableString extends Carvable<String, Carving<String, String>> {
   /// 
   /// If argument `at` is not set, it will be append at the end of the string.
 	CarvableString append(String value, { int? at }) =>
-		this..carve(CarvingAppend(value, at: at));
+		this..carve(CarvingAppend(value, start: at));
 
 	@override
 	String apply() {

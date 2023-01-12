@@ -1,3 +1,11 @@
+## 1.2.1
+
+Fixed:
+- Not sorting **CarvingAppend** when tailing, start position was always at the beginning
+
+Changed:
+- Renamed `at` to `start`, in **CarvingAppend**, to conform with **PositionalCarving**
+
 ## 1.2.0
 
 Added:
