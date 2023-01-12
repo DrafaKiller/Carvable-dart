@@ -1,3 +1,17 @@
+## 1.2.0
+
+Added:
+- **CarvingRange**, has a `start` and `end`, it's the same as the previous **PositionalCarving**
+
+Changed:
+- Simplified **PositionalCarving** to only have a position, moved the rest to **CarvingRange**,
+	now only having `start`
+- Extended **CarvingAppend** from **PositionalCarving**
+- Renamed `at` to `start`, in **CarvingAppend**, to conform with **PositionalCarving**
+
+Fixed:
+- No offset in **CarvingAppend**
+
 ## 1.1.0
 
 Added:

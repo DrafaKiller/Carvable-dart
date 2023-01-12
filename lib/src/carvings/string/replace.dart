@@ -1,6 +1,6 @@
-import '../positional.dart';
+import '../range.dart';
 
-class CarvingReplacement extends PositionalCarving<String, String> {
+class CarvingReplacement extends CarvingRange<String, String> {
 	final String? replacement;
 
 	CarvingReplacement(super.start, super.end, { this.replacement });
